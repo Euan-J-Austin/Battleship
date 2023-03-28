@@ -12,8 +12,6 @@ print(ocean_grid)
 #size, anchor point(fore of ship), will be L->R and T->B horizontal or vertical
 #function that checks suitability for placement?
 
-place = input("Place you ship T/A/C e.g. CH11 ")
-
 ship_size = {
   "Carrier": 5,
   "Battleship": 4,
@@ -23,20 +21,26 @@ ship_size = {
 }
 
 
-def place_my_ship(place):
-  #need to input three separate, Type Align and Coords
-  #as splicing doesn't work with double digit coords
-  type = place[:-3]
-  alignment = place[-3]
-  coords = place[-2:]
-  print(type, alignment, coords)
-  print(coords[1])
-  print(ship_size[type])
+def place_my_ship(type, alignment, coords):
+  upper_limit = int(coords[1]) + int(ship_size[type])
   if alignment == 'H':
-    if int(coords[1]) + ship_size[type] > 10:
+    if int(coords[1:]) + ship_size[type] > 10:
       print("Failed placement.")
+    #now account for coords[2] being a type
     else:
-      print("Placement success.")
+      for x in ocean_grid:
+        if x[0] == coords[0]: #correct row
+          if int(x[1]) < upper_limit:
+            x.append(type)
+          
+      #if the 0 index is equal to coords[0]
+      #and 1 index to range coords[1] + ship_size[type]
+      #upper_limit = coords[1] + (ship_size[type] -1)
+      #if x[1] < upper_limit
+      #x.append Type at index 2 
+
+
+      
 #  if horizontal alignment 
 #      if number + size > 10,
 #        placement failed, does not fit
@@ -50,4 +54,11 @@ def place_my_ship(place):
 #        iterate over coords for len of ship, converting them to ship letter ... not ssame as horizontal, need to move to next row same column e.g. 1,1 next would be 2,1 .. check if not int if not can't place over another ship!
 # then update the ocean grid to reflect placement
 
-place_my_ship(place)
+# def placement_information():
+#   for t in ['Carrier', 'Battleship', 'Cruiser', 'Submarine', 'Destroyer']:
+#     a = input(f"Select alignment for your {t}: ")
+#     c = input(f"Select anchor co-ords for your {t}: ")
+#     place_my_ship(t, a, c)
+
+place_my_ship('Cruiser', 'H', '11')
+print(ocean_grid)
