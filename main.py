@@ -20,18 +20,35 @@ ship_size = {
   "Destroyer": 1
 }
 
-
-def place_my_ship(type, alignment, coords):
-  upper_limit = int(coords[1]) + int(ship_size[type])
+def place_my_ship(type, alignment, x_coord, y_coord):
+  upper_limit = int(y_coord) + int(ship_size[type])
+  ship_keys = [x for x in ship_size.keys()]
+  print(ship_keys)
   if alignment == 'H':
-    if int(coords[1:]) + ship_size[type] > 10:
+    if int(y_coord) + ship_size[type] > 10: #10th row?
       print("Failed placement.")
-    #now account for coords[2] being a type
-    else:
-      for x in ocean_grid:
-        if x[0] == coords[0]: #correct row
-          if int(x[1]) < upper_limit:
-            x.append(type)
+    for x in ocean_grid:
+      if x[0] == x_coord:
+        if len(x) == 3: #fail if even only one contains ship
+          return print("Failed, contains ship.")
+        elif int(x[1]) < upper_limit: #serves as counter
+          x.append(type)
+          #fine h
+          #call input Confirm placement
+  elif alignment == 'V':
+    if int(y_coord) + ship_size[type] > 10:
+      print("Failed placement.")
+    for x in ocean_grid:
+      if x[1] == y_coord:
+        #x coord will need a range or will append to only a single row 
+        if len(x) == 3:
+          return print("Failed, contains ship.")
+        elif int(x[0]) < upper_limit:
+          x.append(type)
+  return print(f"{type} placed at [{x_coord},{y_coord}].")
+  
+
+                   #next problem is to stop operation completely if longer ship overrides shorter 
           
       #if the 0 index is equal to coords[0]
       #and 1 index to range coords[1] + ship_size[type]
@@ -60,5 +77,7 @@ def place_my_ship(type, alignment, coords):
 #     c = input(f"Select anchor co-ords for your {t}: ")
 #     place_my_ship(t, a, c)
 
-place_my_ship('Cruiser', 'H', '11')
+place_my_ship('Cruiser', 'H', '1', '1')
+print(ocean_grid)
+place_my_ship('Destroyer', 'V', '5', '3')
 print(ocean_grid)
