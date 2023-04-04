@@ -1,7 +1,3 @@
-## next step is to make code more elegant then classful
-# victory condition function
-# sunk ship function
-
 ocean_grid = [[x,y] for x in ['1','2','3','4','5','6','7','8','9','10'] for y in ['1','2','3','4','5','6','7','8','9','10']]
 target_grid = [[x,y] for x in ['1','2','3','4','5','6','7','8','9','10'] for y in ['1','2','3','4','5','6','7','8','9','10']]
 computer_ocean_grid = [[x,y] for x in ['1','2','3','4','5','6','7','8','9','10'] for y in ['1','2','3','4','5','6','7','8','9','10']]
@@ -15,34 +11,32 @@ ship_size = {
   "Destroyer": 1
 }
 
-def place_my_ship(type, alignment, x_coord, y_coord):
-  h_upper_limit = int(y_coord) + int(ship_size[type])
-  v_upper_limit = int(x_coord) + int(ship_size[type])
+def place_my_ship(type, alignment, row_coord, column_coord):
+  h_upper_limit = int(column_coord) + int(ship_size[type])
+  v_upper_limit = int(row_coord) + int(ship_size[type])
   if alignment == 'H':
-    if int(y_coord) + ship_size[type] > 11:
-      return print("Failed placement, outside of board")
-    for x in ocean_grid:
-      if x[0] == x_coord and int(y_coord) <= int(x[1]) < 11:
-        if len(x) == 3:
-          return print("Failed, contains ship.") 
-        elif int(x[1]) < h_upper_limit:
-            x.append(type)
+    if int(column_coord) + ship_size[type] > 10:
+      return print("Failed placement, outside of board.")
+    else:
+      for x in ocean_grid:
+        if x[0] == row_coord and int(column_coord) <= int(x[1]):
+          if len(x) == 3:
+            return print("Failed, contains ship.") 
+          elif int(x[1]) < h_upper_limit:
+              x.append(type)
   elif alignment == 'V':
-    if int(x_coord) + ship_size[type] > 11:
+    if int(row_coord) + ship_size[type] > 10:
       return print("Failed placement, outside of board.")
     for x in ocean_grid:
-      if x[1] == y_coord and int(x_coord) <= int(x[0]) < 11:
+      if x[1] == column_coord and int(row_coord) <= int(x[0]):
         if len(x) == 3:
           return print("Failed, contains ship.")
         elif int(x[0]) < v_upper_limit:
           x.append(type)
-  print(f"{type} placed at [{x_coord},{y_coord}].")
+  print(f"{type} placed at [{row_coord},{column_coord}].")
 
 place_my_ship('Carrier', 'H', '1', '1')
-place_my_ship('Battleship', 'H', '9', '4')
-place_my_ship('Cruiser', 'V', '5', '3')
-place_my_ship('Submarine', 'V', '3', '1')
-place_my_ship('Destroyer', 'H', '10', '10')
+place_my_ship('Submarine', 'V', '5', '4')
 print(ocean_grid)
 
 def shoot(x_coord, y_coord):
@@ -57,8 +51,8 @@ def shoot(x_coord, y_coord):
         return print("Miss!")
         #app miss
 
-shoot('1','1')
-print(target_grid)
+# shoot('1','1')
+# print(target_grid)
       
 def output_grid(grid):
   temp_grid = grid.copy()
@@ -83,7 +77,7 @@ def output_grid(grid):
   for x in temp_grid:
     if len(x) == 2:
       x.clear()
-      x.append('Blue')
+      x.append('\u223F')
     elif len(x) == 3:
       if x[2] == 'Carrier':
         x.clear()
@@ -104,7 +98,28 @@ def output_grid(grid):
       if x[3] == 'Hit.':
         x.clear()
         x.append('F')
-    
+
+  # for x in grid[::10]:
+  #   if x != grid[0]:
+  #       x.append('\n')
+
+  
+
+  no_list = ' '.join([''.join(x) for x in grid])
+
+  print(f"""
+     1 2 3 4 5 6 7 8 9 10
+  1  {no_list[0:19]}
+  2  {no_list[20:39]}
+  3  {no_list[40:59]}
+  4  {no_list[60:79]}
+  5  {no_list[80:99]}
+  6  {no_list[100:119]}
+  7  {no_list[120:139]}
+  8  {no_list[140:159]}
+  9  {no_list[160:179]}
+  10 {no_list[180:199]}
+  """)
   
   return print(temp_grid)
 
